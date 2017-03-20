@@ -3,26 +3,29 @@ from functools import partial
 from kivy.logger import Logger
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
-from kivy.properties import ObjectProperty
-from gallery.overview import Overview
-from gallery.stage import Stage
-from gallery.explorer import Explorer
+from kivy.properties import ObjectProperty, ListProperty
+from .overview import Overview
+from .stage import Stage
+from .explorer import Explorer
 
 
 class ScreenMgr(ScreenManager):
     """Custom ScreenManager providing callbacks for switching screens.
     """
     transition = FadeTransition()
-
-    def __init__(self, media):
+    media = ListProperty()
+    def __init__(self, **kwargs):
         super(ScreenMgr, self).__init__()
-        self.overviewScreen = SideBarScreen("Overview", Overview(media))
-        self.explorerScreen = SideBarScreen("Explorer", Explorer(media))
+        
+    def on_media(self, instance, media):
+        self.overviewScreen = SideBarScreen("Overview", Overview(media, self))
+        self.explorerScreen = SideBarScreen("Explorer", Explorer(media, self))
 
         self.stage = Stage(media)
         self.stageScreen = SideBarScreen("Stage", self.stage)
 
         self.addScreens(self.overviewScreen, self.stageScreen, self.explorerScreen)
+
 
     def addScreens(self, *screens):
         """Adds the given screens and populates the sidebars respectively.

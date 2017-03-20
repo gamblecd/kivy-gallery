@@ -8,10 +8,10 @@ from kivy.properties import ObjectProperty
 class Explorer(FloatLayout):
     """Layout displaying all MediaObjects. Features multitouch transformations.
     """
-    def __init__(self, media):
+    def __init__(self, media, mgr):
         super(Explorer, self).__init__()
         for mediaObject in media:
-            item = ExplorerItem(mediaObject)
+            item = ExplorerItem(mediaObject, mgr)
             self.add_widget(item)
 
 
@@ -21,8 +21,9 @@ class ExplorerItem(Scatter):
     screenMgr = ObjectProperty()
     image = ObjectProperty()
 
-    def __init__(self, mediaObject):
+    def __init__(self, mediaObject, mgr):
         super(ExplorerItem, self).__init__()
+        self.screenMgr = mgr
         self.mediaObject = mediaObject
         self.image.source = self.mediaObject.featured
         self.rotation = 10 * randint(-2, 2)

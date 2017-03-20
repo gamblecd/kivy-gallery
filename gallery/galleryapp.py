@@ -11,7 +11,7 @@ from kivy.app import App
 from kivy.properties import ObjectProperty
 from kivy.core.audio import SoundLoader
 from gallery.screens import ScreenMgr
-from gallery.mediafactory import loadMedia
+from gallery.mediafactory import loadMedia, loadPictures
 
 
 class GalleryApp(App):
@@ -27,13 +27,14 @@ class GalleryApp(App):
         mediaDir = self.config.get('media', 'dir')
         playlistFile = self.config.get('media', 'playlist')
         musicFile = self.config.get('media', 'music')
-
         mediaDir = path.realpath(mediaDir)
+        
         sound = SoundLoader.load(path.join(mediaDir, musicFile))
         sound.loop = True
         sound.play()
-
-        media = loadMedia(mediaDir, playlistFile)
+        mediaDir = path.realpath("./NEW_TEST")
+        
+        media = loadPictures(mediaDir)
         self.mgr = ScreenMgr(media)
 
         return self.mgr

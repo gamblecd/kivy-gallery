@@ -7,12 +7,12 @@ class Overview(ScrollView):
     """ScrollView showing all media widgets available in the app.
     """
     content = ObjectProperty()
-
-    def __init__(self, media):
+    def __init__(self, media, mgr):
         super(Overview, self).__init__()
         for mediaObject in media:
-            item = OverviewItem(mediaObject)
-            self.content.add_widget(item)
+            item = OverviewItem(mediaObject, mgr)
+            if self.content:
+                self.content.add_widget(item)
 
 
 class OverviewItem(Button):
@@ -21,11 +21,12 @@ class OverviewItem(Button):
     """
     screenMgr = ObjectProperty()
 
-    def __init__(self, mediaObject):
+    def __init__(self, mediaObject, mgr):
         super(OverviewItem, self).__init__()
         self.mediaObject = mediaObject
         self.text = self.mediaObject.name
         self.background_normal = self.mediaObject.thumbnail
+        self.screenMgr = mgr
 
     def on_press(self):
         self.screenMgr.showMediaObject(self.mediaObject)
